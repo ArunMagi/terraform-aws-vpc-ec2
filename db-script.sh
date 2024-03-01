@@ -34,12 +34,6 @@ sudo ufw disable
 
 #clone the db script and deployment file
 
-cd /home/ubuntu
-
-git clone https://root:glpat-Ky-sxWkGPGM2JzT2oR4Z@gitlab.convergentechnologies.com/devops/terraform-vpc-ec2.git
-
-git clone https://root:glpat-Ky-sxWkGPGM2JzT2oR4Z@gitlab.convergentechnologies.com/e-dms/postman/testing-arun.git
-
 
 #install mysql
 
@@ -51,28 +45,14 @@ sudo sed -i "s/127.0.0.1/0.0.0.0/g" /etc/mysql/mysql.conf.d/mysqld.cnf
 
 sudo service mysql restart
 
-mysql  -e 'CREATE DATABASE IF NOT EXISTS cts_obe;'
-mysql  -e 'CREATE DATABASE IF NOT EXISTS ibp_master_data;'
-mysql  -e 'CREATE DATABASE IF NOT EXISTS cts_backoffice;'
-mysql  -e "CREATE USER IF NOT EXISTS 'ctsuser'@'%' IDENTIFIED BY 'Welcome@123';"
+mysql  -e 'CREATE DATABASE IF NOT EXISTS test;'
+mysql  -e 'CREATE DATABASE IF NOT EXISTS test_12;'
+mysql  -e 'CREATE DATABASE IF NOT EXISTS office;'
+mysql  -e "CREATE USER IF NOT EXISTS 'test'@'%' IDENTIFIED BY 'Welcome@123';"
 mysql  -e "GRANT ALL PRIVILEGES ON *.* TO 'ctsuser'@'%';"
 mysql  -e "FLUSH PRIVILEGES;"
 mysql  -e "SET GLOBAL log_bin_trust_function_creators = 1;"
 
-PUBLIC_IP=$(curl -s ifconfig.me)
-
-
-mysql -h $PUBLIC_IP -u ctsuser -pWelcome@123 cts_obe < /home/ubuntu/terraform-vpc-ec2/db-script/ibp_data.sql
-mysql -h $PUBLIC_IP -u ctsuser -pWelcome@123 cts_obe < /home/ubuntu/terraform-vpc-ec2/db-script/ibp_function.sql
-#mysql -h $PUBLIC_IP -u ctsuser -pWelcome@123 cts_obe < /home/ubuntu/terraform-vpc-ec2/db-script/ibp_views.sql
-mysql -h $PUBLIC_IP -u ctsuser -pWelcome@123 ibp_master_data < /home/ubuntu/terraform-vpc-ec2/db-script/ibp_master_data.sql
-
-
-sudo hostnamectl set-hostname db-server
-
-sleep 20s
-
-mysql -h $PUBLIC_IP -u ctsuser -pWelcome@123 cts_obe < /home/ubuntu/terraform-vpc-ec2/db-script/ibp_views.sql
 
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
 
